@@ -12,6 +12,7 @@ public class Complaint {
     private String address;
     private String category;
     private Timestamp creationTime;
+    private String status;
 
     public ComplaintDto toDto(){
         ComplaintDto dto = new ComplaintDto();
@@ -20,18 +21,20 @@ public class Complaint {
         dto.setAddress(address);
         dto.setCategory(category);
         dto.setCreationTime(creationTime);
+        dto.setStatus(status);
         return dto;
     }
 
     public Complaint() {
     }
 
-    public Complaint(long complaintId, String message, String address, String category, Timestamp creationTime) {
+    public Complaint(long complaintId, String message, String address, String category, Timestamp creationTime, String status) {
         this.complaintId = complaintId;
         this.message = message;
         this.address = address;
         this.category = category;
         this.creationTime = creationTime;
+        this.status = status;
     }
 
     public long getComplaintId() {
@@ -72,5 +75,13 @@ public class Complaint {
 
     public void setCreationTime(Timestamp creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

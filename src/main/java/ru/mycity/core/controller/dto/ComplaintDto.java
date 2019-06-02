@@ -1,13 +1,18 @@
 package ru.mycity.core.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Timestamp;
 
 public class ComplaintDto {
+    @JsonProperty(value = "complaintId")
     private long complaintId;
     private String message;
     private String address;
     private String category;
+    @JsonProperty(value = "creation_time")
     private Timestamp creationTime;
+    private String status;
 
     public long getComplaintId() {
         return complaintId;
@@ -47,5 +52,13 @@ public class ComplaintDto {
 
     public void setCreationTime(Timestamp creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

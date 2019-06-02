@@ -3,6 +3,8 @@ package ru.mycity.core.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.ComplaintDto;
+import ru.mycity.core.controller.dto.InsertComplaintResultDto;
+import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.service.dao.IComplaintDao;
 import ru.mycity.core.service.dao.model.Complaint;
 
@@ -20,5 +22,27 @@ public class ComplaintService {
                 .stream()
                 .map(Complaint::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public InsertComplaintResultDto addComplaint(ComplaintDto dto){
+        return createInsertResult(complaintDao.insertComplaint(dto));
+
+    }
+
+    private InsertComplaintResultDto createInsertResult(long complaintId){
+        InsertComplaintResultDto complaintResultDto = new InsertComplaintResultDto();
+        ResultDto resultDto = new ResultDto();
+        if (complaintId != 0L){
+            resultDto.setStatusCode("200");
+            resultDto.setMessage("OK");
+            complaintResultDto.setComplaintId(complaintId);
+            complaintResultDto.setResult(resultDto);
+            return complaintResultDto;
+        } else {
+            resultDto.setStatusCode("500");
+            resultDto.setMessage("ERROR");
+            complaintResultDto.setResult(resultDto);
+            return complaintResultDto;
+        }
     }
 }

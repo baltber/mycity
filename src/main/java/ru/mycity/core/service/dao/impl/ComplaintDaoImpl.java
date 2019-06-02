@@ -4,13 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mycity.core.controller.dto.ComplaintDto;
 import ru.mycity.core.service.dao.IComplaintDao;
 import ru.mycity.core.service.dao.model.Complaint;
 import ru.mycity.core.service.dao.utils.ResourceUtils;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -33,7 +37,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
     }
 
     public List<Complaint> getComplaints(String category, Timestamp creationTimeStart, Timestamp creationTimeEnd){
-        StringJoiner where = new StringJoiner("", " WHERE ", "").setEmptyValue("");
+        StringJoiner where = new StringJoiner("", " WHERE true", "").setEmptyValue("");
 
         if (category != null) {
             where.add(" AND category = :category");
@@ -55,6 +59,23 @@ public class ComplaintDaoImpl implements IComplaintDao {
         return getRecordsWithParams(sql, params);
     }
 
+    public long insertComplaint(ComplaintDto dto){
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/sql_insert_complaint.sql");
+        jdbcOperations.update(psc-> {
+            PreparedStatement ps = psc.prepareStatement(sql, new String[]{"complaint_id"});
+            ps.setString(1, dto.getMessage());
+            ps.setString(2, dto.getAddress());
+            ps.setString(3, dto.getCategory());
+            return ps;
+        }, keyHolder);
+
+
+        return keyHolder.getKey().longValue();
+
+    }
+
     private List<Complaint> getRecordsWithParams(String sql, Map<String, Object> params) {
         return jdbcTemplate.query(sql, params, createRowMapper());
     }
@@ -65,7 +86,8 @@ public class ComplaintDaoImpl implements IComplaintDao {
                 rs.getString("message"),
                 rs.getString("address"),
                 rs.getString("category"),
-                rs.getTimestamp("creation_time")
+                rs.getTimestamp("creation_time"),
+                rs.getString("status")
         );
     }
 }

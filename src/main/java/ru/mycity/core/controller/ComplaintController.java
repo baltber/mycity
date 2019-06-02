@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.mycity.core.controller.dto.ComplaintDto;
+import ru.mycity.core.controller.dto.InsertComplaintResultDto;
 import ru.mycity.core.service.ComplaintService;
 
 import java.util.List;
@@ -20,5 +21,11 @@ public class ComplaintController {
     @ResponseBody
     public List<ComplaintDto> getComplaints(@RequestParam(value = "category" , required = false) String category) {
         return service.getComplaints(category);
+    }
+
+    @RequestMapping(path = "/complaint", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public InsertComplaintResultDto setComplaints(@RequestBody ComplaintDto complaint) {
+        return service.addComplaint(complaint);
     }
 }
