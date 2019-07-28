@@ -1,6 +1,7 @@
-package ru.mycity.core.controller.dto;
+package ru.mycity.core.controller.dto.complaint;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.mycity.core.controller.dto.ResultDto;
 
 public class InsertComplaintResultDto {
     private ResultDto result;

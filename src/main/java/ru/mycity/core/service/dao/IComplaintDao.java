@@ -1,6 +1,6 @@
 package ru.mycity.core.service.dao;
 
-import ru.mycity.core.controller.dto.ComplaintDto;
+import ru.mycity.core.controller.dto.complaint.ComplaintDto;
 import ru.mycity.core.service.dao.model.Complaint;
 
 import java.sql.Timestamp;

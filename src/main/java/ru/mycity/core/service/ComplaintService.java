@@ -2,8 +2,8 @@ package ru.mycity.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mycity.core.controller.dto.ComplaintDto;
-import ru.mycity.core.controller.dto.InsertComplaintResultDto;
+import ru.mycity.core.controller.dto.complaint.ComplaintDto;
+import ru.mycity.core.controller.dto.complaint.InsertComplaintResultDto;
 import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.service.dao.IComplaintDao;
 import ru.mycity.core.service.dao.model.Complaint;

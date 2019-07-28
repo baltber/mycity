@@ -9,13 +9,12 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mycity.core.controller.dto.ComplaintDto;
+import ru.mycity.core.controller.dto.complaint.ComplaintDto;
 import ru.mycity.core.service.dao.IComplaintDao;
 import ru.mycity.core.service.dao.model.Complaint;
 import ru.mycity.core.service.dao.utils.ResourceUtils;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;

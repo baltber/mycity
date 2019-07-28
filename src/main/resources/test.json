@@ -1,1 +1,5 @@
 {"message":"Проблема с электричеством","address":"Ул. Ленина","category":"Электричество"}
+
+{"user_name":"admin2"}
+
+{"user":{"user_name":"admin2","password":"admin2","role":"admin"}}

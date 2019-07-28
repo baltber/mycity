@@ -7,6 +7,14 @@ public class ResultDto {
     private String statusCode;
     private String message;
 
+    public ResultDto() {
+    }
+
+    public ResultDto(String statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+
     public String getStatusCode() {
         return statusCode;
     }

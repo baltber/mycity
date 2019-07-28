@@ -1,4 +1,4 @@
-package ru.mycity.core.controller.dto;
+package ru.mycity.core.controller.dto.complaint;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

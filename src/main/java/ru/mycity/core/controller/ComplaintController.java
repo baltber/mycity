@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.mycity.core.controller.dto.ComplaintDto;
-import ru.mycity.core.controller.dto.InsertComplaintResultDto;
+import ru.mycity.core.controller.dto.complaint.ComplaintDto;
+import ru.mycity.core.controller.dto.complaint.InsertComplaintResultDto;
 import ru.mycity.core.service.ComplaintService;
 
 import java.util.List;
