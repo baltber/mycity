@@ -3,4 +3,4 @@ select
     u.password,
     u.role
 from auth.usr u
-where u.username = :username;
+where u.login = :login;

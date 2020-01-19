@@ -1,5 +1,6 @@
 package ru.mycity.core.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -21,12 +22,14 @@ public class UserController {
 
     @RequestMapping(path = "/auth", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public AuthUserResponseDto getUser(@RequestBody AuthUserRequestDto requestDto) {
+    @ApiOperation(value = "Авторизация")
+    public AuthUserResponseDto auth(@RequestBody AuthUserRequestDto requestDto) {
         return service.auth(requestDto);
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
+    @ApiOperation(value = "Добавление нового пользователя")
     public AddUserResponseDto addUser(@RequestBody AddUserRequestDto requestDto) {
         return service.add(requestDto);
     }

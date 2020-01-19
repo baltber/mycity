@@ -34,23 +34,29 @@ public class UserDaoImpl implements IUserDao {
 
 
     @Override
-    public List<User> getUserByUserName(String userName){
+    public List<User> getUserByLogin(String login){
         String sql = ResourceUtils.resourceAsString(getClass(),"dao/user/sql_get_user.sql");
-        SqlParameterSource params = new MapSqlParameterSource("username", userName);
+        SqlParameterSource params = new MapSqlParameterSource("login", login);
 
         return getWithParams(sql, params);
     }
 
     @Override
-    public long addNewUser(String userName, String password, String role){
+    public long save(User user){
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         String sql = ResourceUtils.resourceAsString(getClass(),"dao/user/sql_insert_new_user.sql");
         jdbcOperations.update(psc-> {
             PreparedStatement ps = psc.prepareStatement(sql, new String[]{"user_id"});
-            ps.setString(1, userName);
-            ps.setString(2, password);
-            ps.setString(3, role);
+            int i = 1;
+            ps.setString(i++, user.getFirstName());
+            ps.setString(i++, user.getLastName());
+            ps.setString(i++, user.getAddress());
+            ps.setInt(i++, user.getFlat());
+            ps.setString(i++, user.getLogin());
+            ps.setString(i++, user.getPassword());
+            ps.setString(i++, user.getLocation());
+            ps.setString(i++, user.getRole());
             return ps;
         }, keyHolder);
 
@@ -64,8 +70,13 @@ public class UserDaoImpl implements IUserDao {
 
     public RowMapper<User> createRowMapper() {
         return  (rs, rowNum) -> new User(
-                rs.getString("username"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("address"),
+                rs.getInt("flat"),
+                rs.getString("login"),
                 rs.getString("password"),
+                rs.getString("location"),
                 rs.getString("role")
         );
     }
