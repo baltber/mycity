@@ -27,7 +27,13 @@ public class User {
 
     public UserDto toDto(){
         UserDto dto = new UserDto();
+        dto.setFirstName(firstName);
+        dto.setLastName(lastName);
+        dto.setAddress(address);
+        dto.setFlat(flat);
+        dto.setLogin(login);
         dto.setPassword(password);
+        dto.setLocation(location);
         dto.setRole(role);
         return dto;
     }

@@ -1,22 +1,26 @@
 package ru.mycity.core.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.controller.dto.user.*;
 import ru.mycity.core.service.dao.IUserDao;
-import ru.mycity.core.service.dao.impl.UserDaoImpl;
 import ru.mycity.core.service.dao.model.User;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
+
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private IUserDao userDao;
@@ -34,7 +38,8 @@ public class UserService {
 
             return getUserByLogin(requestDto.getLogin());
         } catch (AuthenticationException ex){
-            return createAuthResponseNotFound();
+            log.error(ex.getMessage(), ex);
+            return createAuthResponseUnauthorized();
         }
     }
 
@@ -52,6 +57,9 @@ public class UserService {
 
     public AddUserResponseDto add(AddUserRequestDto requestDto){
         UserDto userDto = requestDto.getUserDto();
+        //Закодируем пароль
+        String pass = new BCryptPasswordEncoder().encode(userDto.getPassword());
+        userDto.setPassword(pass);
         long userId =  userDao.save(userDto.toEntity());
         return userId != 0 ? createResponseOk() : createResponseError();
     }
@@ -66,6 +74,12 @@ public class UserService {
     private AuthUserResponseDto createAuthResponseNotFound(){
         AuthUserResponseDto responseDto=  new AuthUserResponseDto();
         responseDto.setResultDto(new ResultDto("404", "NOT_FOUND"));
+        return responseDto;
+    }
+
+    private AuthUserResponseDto createAuthResponseUnauthorized(){
+        AuthUserResponseDto responseDto=  new AuthUserResponseDto();
+        responseDto.setResultDto(new ResultDto("401", "Unauthorized"));
         return responseDto;
     }
 
