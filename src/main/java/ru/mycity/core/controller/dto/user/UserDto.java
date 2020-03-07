@@ -5,15 +5,15 @@ import ru.mycity.core.service.dao.model.User;
 
 public class UserDto {
 
-    @JsonProperty("first_name")
+    @JsonProperty("name")
     private String firstName;
     @JsonProperty("last_name")
     private String lastName;
     @JsonProperty("address")
     private String address;
-    @JsonProperty("flat")
+    @JsonProperty("apartment")
     private int flat;
-    @JsonProperty("login")
+    @JsonProperty("email")
     private String login;
     @JsonProperty("password")
     private String password;
@@ -21,6 +21,10 @@ public class UserDto {
     private String location;
     @JsonProperty("role")
     private String role;
+    @JsonProperty("user_id")
+    private String userId;
+    @JsonProperty("auth")
+    private int auth;
 
     public User toEntity(){
         return new User(
@@ -31,7 +35,8 @@ public class UserDto {
                 login,
                 password,
                 location,
-                role
+                role,
+                userId
         );
     }
 
@@ -97,5 +102,21 @@ public class UserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public int getAuth() {
+        return auth;
+    }
+
+    public void setAuth(int auth) {
+        this.auth = auth;
     }
 }

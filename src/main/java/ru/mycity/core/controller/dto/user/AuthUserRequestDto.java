@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "Запрос авторизации пользователя")
 public class AuthUserRequestDto {
 
-    @JsonProperty("login")
+    @JsonProperty("email")
     @ApiModelProperty(value = "Имя пользователя")
     private String login;
 

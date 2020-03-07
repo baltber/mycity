@@ -1,5 +1,6 @@
 package ru.mycity.core.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ public class ComplaintController {
 
     @RequestMapping(path = "/complaint", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
+    @ApiOperation(value = "complaints")
     public List<ComplaintDto> getComplaints(@RequestParam(value = "category" , required = false) String category) {
         return service.getComplaints(category);
     }

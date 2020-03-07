@@ -14,6 +14,7 @@ import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.controller.dto.user.*;
 import ru.mycity.core.service.dao.IUserDao;
 import ru.mycity.core.service.dao.model.User;
+import ru.mycity.core.utils.Utils;
 
 import java.util.Optional;
 
@@ -60,8 +61,9 @@ public class UserService {
         //Закодируем пароль
         String pass = new BCryptPasswordEncoder().encode(userDto.getPassword());
         userDto.setPassword(pass);
-        long userId =  userDao.save(userDto.toEntity());
-        return userId != 0 ? createResponseOk() : createResponseError();
+        userDto.setUserId(Utils.getUUID());
+        long id =  userDao.save(userDto.toEntity());
+        return id != 0 ? createResponseOk() : createResponseError();
     }
 
     private AuthUserResponseDto createAuthResponseOk(UserDto userDto){

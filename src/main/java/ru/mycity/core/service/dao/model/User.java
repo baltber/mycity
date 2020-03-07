@@ -12,9 +12,10 @@ public class User {
     private String password;
     private String location;
     private String role;
+    private String userId;
 
 
-    public User(String firstName, String lastName, String address, int flat, String login, String password, String location, String role) {
+    public User(String firstName, String lastName, String address, int flat, String login, String password, String location, String role, String userId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -23,6 +24,7 @@ public class User {
         this.password = password;
         this.location = location;
         this.role = role;
+        this.userId = userId;
     }
 
     public UserDto toDto(){
@@ -35,6 +37,7 @@ public class User {
         dto.setPassword(password);
         dto.setLocation(location);
         dto.setRole(role);
+        dto.setUserId(userId);
         return dto;
     }
 
@@ -100,5 +103,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

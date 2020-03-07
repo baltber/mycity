@@ -57,6 +57,7 @@ public class UserDaoImpl implements IUserDao {
             ps.setString(i++, user.getPassword());
             ps.setString(i++, user.getLocation());
             ps.setString(i++, user.getRole());
+            ps.setString(i++, user.getUserId());
             return ps;
         }, keyHolder);
 
@@ -77,7 +78,9 @@ public class UserDaoImpl implements IUserDao {
                 rs.getString("login"),
                 rs.getString("password"),
                 rs.getString("location"),
-                rs.getString("role")
+                rs.getString("role"),
+                rs.getString("user_guid")
+
         );
     }
 }

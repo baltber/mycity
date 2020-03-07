@@ -61,11 +61,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user").authenticated()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .and()
+
                 .formLogin()
 //                .successHandler(mySuccessHandler)
 //                .failureHandler(myFailureHandler)
                 .and()
                 .logout();
+
     }
 
     /**
