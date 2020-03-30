@@ -61,7 +61,9 @@ public class UserService {
         //Закодируем пароль
         String pass = new BCryptPasswordEncoder().encode(userDto.getPassword());
         userDto.setPassword(pass);
-        userDto.setUserId(Utils.getUUID());
+        userDto.setUserId(userDto.getUserId() != null ? userDto.getUserId() : Utils.getUUID());
+        //TODO добавить роли
+        userDto.setRole("user");
         long id =  userDao.save(userDto.toEntity());
         return id != 0 ? createResponseOk() : createResponseError();
     }
