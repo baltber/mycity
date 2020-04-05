@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Fields {
     private Issuetype issuetype;
     private Project project;
+    @JsonProperty("customfield_10057")
+    private Comment comment;
     private Description description;
     @JsonProperty("customfield_10049")
     private String customerName;
     private String summary;
-    @JsonProperty("customfield_10047")
-    private Address address;
+    @JsonProperty("customfield_10054")
+    private String address;
     @JsonProperty("customfield_10048")
     private String flat;
 
@@ -31,6 +33,14 @@ public class Fields {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
     public Description getDescription() {
@@ -57,11 +67,11 @@ public class Fields {
         this.summary = summary;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

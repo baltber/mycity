@@ -10,6 +10,10 @@ public class Address {
         this.id = id;
     }
 
+    public Address(String value) {
+        this.value = value;
+    }
+
     public Address() {
     }
 

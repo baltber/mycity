@@ -3,11 +3,11 @@ package ru.mycity.core.controller.dto.order;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.List;
-
 @ApiModel(description = "Запрос добавления заказа")
 public class OrderRequestDto {
 
+    @ApiModelProperty(value = "Наименование заказа")
+    private String summary;
     @ApiModelProperty(value = "ФИО клиента")
     private String name;
     @ApiModelProperty(value = "Адрес доставки")
@@ -18,10 +18,20 @@ public class OrderRequestDto {
     private String phone;
     @ApiModelProperty(value = "email клиента")
     private String email;
+    @ApiModelProperty(value = "Комментарий к заказу")
+    private String comment;
     @ApiModelProperty(value = "Данные заказа")
-    private List<OrderDto> order;
+    private OrderList orderList;
 
     public OrderRequestDto() {
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getName() {
@@ -64,11 +74,19 @@ public class OrderRequestDto {
         this.email = email;
     }
 
-    public List<OrderDto> getOrder() {
-        return order;
+    public String getComment() {
+        return comment;
     }
 
-    public void setOrder(List<OrderDto> order) {
-        this.order = order;
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public OrderList getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(OrderList orderList) {
+        this.orderList = orderList;
     }
 }
