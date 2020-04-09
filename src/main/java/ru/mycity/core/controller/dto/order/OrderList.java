@@ -8,6 +8,7 @@ public class OrderList {
     @JsonProperty("order")
     private List<OrderDto> orderDtoList;
     private String delivery;
+    private int deliveryPrice;
     private int totalPrice;
 
 
@@ -33,6 +34,14 @@ public class OrderList {
 
     public void setDelivery(String delivery) {
         this.delivery = delivery;
+    }
+
+    public int getDeliveryPrice() {
+        return deliveryPrice;
+    }
+
+    public void setDeliveryPrice(int deliveryPrice) {
+        this.deliveryPrice = deliveryPrice;
     }
 
     public int getTotalPrice() {

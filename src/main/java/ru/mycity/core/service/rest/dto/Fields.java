@@ -13,6 +13,10 @@ public class Fields {
     private String summary;
     @JsonProperty("customfield_10054")
     private String address;
+    @JsonProperty("customfield_10055")
+    private String email;
+    @JsonProperty("customfield_10056")
+    private String phone;
     @JsonProperty("customfield_10048")
     private String flat;
 
@@ -73,6 +77,22 @@ public class Fields {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getFlat() {

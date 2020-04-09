@@ -35,7 +35,10 @@ public class OrderController {
     @ApiOperation(value = "Добавление нового заказа через Web Hook")
     public String addOrderWithWebHook(@RequestBody String request) {
         log.info("New order: " + request);
-        stringOrderService.add(request);
+        if(!"test=test".equals(request)){
+            stringOrderService.add(request);
+        }
+
         return "OK";
     }
 

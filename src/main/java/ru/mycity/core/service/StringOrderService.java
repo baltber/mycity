@@ -42,6 +42,7 @@ public class StringOrderService {
         OrderList orderList = new OrderList(createListOrder(map));
         orderList.setDelivery(map.get("payment[delivery]"));
         orderList.setTotalPrice(Integer.valueOf(map.get("payment[subtotal]")));
+        orderList.setDeliveryPrice(Integer.valueOf(map.get("delivery_price")));
         requestDto.setOrderList(orderList);
 
         return requestDto;
@@ -71,11 +72,17 @@ public class StringOrderService {
     public Map<String, String> requestToMap(String s){
 
         String [] split = s.split("&");
+        String deliveryPriceString = Arrays.stream(split)
+                .map(e -> e.split("="))
+                .filter(e -> e[0].equals("delivery"))
+                .findFirst()
+                .get()[2];
 
         Map<String, String> map = Arrays.stream(split)
                 .map(e -> e.split("="))
                 .collect(Collectors.toMap(a -> a[0], a -> a[1]));
 
+        map.put("delivery_price", deliveryPriceString.trim());
         return new LinkedHashMap<>(map);
 
     }

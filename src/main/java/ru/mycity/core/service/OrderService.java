@@ -44,6 +44,8 @@ public class OrderService {
         fields.setCustomerName(requestDto.getName());
         fields.setSummary(requestDto.getSummary());
         fields.setAddress(requestDto.getAddress());
+        fields.setEmail(requestDto.getEmail());
+        fields.setPhone(requestDto.getPhone());
         fields.setFlat(requestDto.getFlat());
 
 
