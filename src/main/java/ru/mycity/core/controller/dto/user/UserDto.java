@@ -25,6 +25,8 @@ public class UserDto {
     private String userId;
     @JsonProperty("auth")
     private int auth;
+    @JsonProperty("organisation_guid")
+    private String organisationGuid;
 
     public User toEntity(){
         return new User(
@@ -118,5 +120,13 @@ public class UserDto {
 
     public void setAuth(int auth) {
         this.auth = auth;
+    }
+
+    public String getOrganisationGuid() {
+        return organisationGuid;
+    }
+
+    public void setOrganisationGuid(String organisationGuid) {
+        this.organisationGuid = organisationGuid;
     }
 }

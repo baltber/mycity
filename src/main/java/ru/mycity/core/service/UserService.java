@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.controller.dto.user.*;
+import ru.mycity.core.service.dao.IOrganisationDao;
 import ru.mycity.core.service.dao.IUserDao;
 import ru.mycity.core.service.dao.model.User;
 import ru.mycity.core.utils.Utils;
@@ -25,6 +26,8 @@ public class UserService {
 
     @Autowired
     private IUserDao userDao;
+    @Autowired
+    private IOrganisationDao organisationDao;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -56,16 +59,30 @@ public class UserService {
          }
     }
 
+
+
     public AddUserResponseDto add(AddUserRequestDto requestDto){
         UserDto userDto = requestDto.getUserDto();
         //Закодируем пароль
         String pass = new BCryptPasswordEncoder().encode(userDto.getPassword());
         userDto.setPassword(pass);
         userDto.setUserId(userDto.getUserId() != null ? userDto.getUserId() : Utils.getUUID());
-        //TODO добавить роли
         userDto.setRole("user");
         long id =  userDao.save(userDto.toEntity());
         return id != 0 ? createResponseOk() : createResponseError();
+    }
+
+    public AddUserResponseDto connectToOrganisation(AddUserRequestDto requestDto){
+        Optional <User> user = userDao.getUserByLogin(requestDto.getUserDto().getLogin())
+                .stream().findFirst();
+
+        if (user.isPresent() && requestDto.getUserDto().getOrganisationGuid() != null){
+            long orgId = organisationDao.getIdByGuid(requestDto.getUserDto().getOrganisationGuid());
+            userDao.updateOrgId(user.get().getUserId(), orgId);
+            return null;
+        } else {
+            return null;
+        }
     }
 
     private AuthUserResponseDto createAuthResponseOk(UserDto userDto){

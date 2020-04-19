@@ -57,11 +57,23 @@ public class UserDaoImpl implements IUserDao {
             ps.setString(i++, user.getPassword());
             ps.setString(i++, user.getLocation());
             ps.setString(i++, user.getRole());
-            ps.setString(i++, user.getUserId());
+            ps.setString(i++, user.getUserGuid());
             return ps;
         }, keyHolder);
 
         return keyHolder.getKey().longValue();
+    }
+
+    @Override
+    public void updateOrgId(long userId, long orgId) {
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/user/sql_update_user_organisation.sql");
+        jdbcOperations.update(psc-> {
+            PreparedStatement ps = psc.prepareStatement(sql);
+            int i = 1;
+            ps.setLong(i++, userId);
+            ps.setLong(i++, orgId);
+            return ps;
+        });
     }
 
 
@@ -71,6 +83,7 @@ public class UserDaoImpl implements IUserDao {
 
     public RowMapper<User> createRowMapper() {
         return  (rs, rowNum) -> new User(
+                rs.getLong("user_id"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("address"),

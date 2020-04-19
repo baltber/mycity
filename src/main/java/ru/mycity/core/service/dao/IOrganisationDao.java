@@ -4,8 +4,8 @@ import ru.mycity.core.service.dao.model.User;
 
 import java.util.List;
 
-public interface IUserDao {
-    List<User> getUserByLogin(String userName);
+public interface IOrganisationDao {
     long save(User user);
-    void updateOrgId(long userId, long orgId);
+    long getIdByGuid(String guid);
+    String getConfigByGuid(String guid);
 }

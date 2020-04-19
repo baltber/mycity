@@ -36,10 +36,12 @@ public class OrderService {
         Content descriptionContent = createContent(jsonUtils.convertToJson(requestDto.getOrderList()).toString());
         Description description = new Description(1, "doc", Collections.singletonList(descriptionContent));
         fields.setDescription(description);
+        if(requestDto.getComment() != null){
+            Content commentContent = createContent( requestDto.getComment());
+            Comment comment = new Comment(1, "doc", Collections.singletonList(commentContent));
+            fields.setComment(comment);
+        }
 
-        Content commentContent = createContent( requestDto.getComment());
-        Comment comment = new Comment(1, "doc", Collections.singletonList(commentContent));
-        fields.setComment(comment);
 
         fields.setCustomerName(requestDto.getName());
         fields.setSummary(requestDto.getSummary());

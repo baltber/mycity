@@ -12,8 +12,8 @@ import ru.mycity.core.controller.dto.user.AuthUserResponseDto;
 import ru.mycity.core.service.UserService;
 
 @Component
-//@RestController
-//@RequestMapping("/api/user")
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -22,15 +22,22 @@ public class UserController {
 
     @RequestMapping(path = "/auth", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-//    @ApiOperation(value = "Авторизация")
+    @ApiOperation(value = "Авторизация")
     public AuthUserResponseDto auth(@RequestBody AuthUserRequestDto requestDto) {
         return service.auth(requestDto);
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-//    @ApiOperation(value = "Добавление нового пользователя")
+    @ApiOperation(value = "Добавление нового пользователя")
     public AddUserResponseDto addUser(@RequestBody AddUserRequestDto requestDto) {
+        return service.add(requestDto);
+    }
+
+    @RequestMapping(path = "/connect", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    @ApiOperation(value = "Добавление пользователя в организацию")
+    public AddUserResponseDto addUserToOrganisation(@RequestBody AddUserRequestDto requestDto) {
         return service.add(requestDto);
     }
 }

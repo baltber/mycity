@@ -4,6 +4,7 @@ import ru.mycity.core.controller.dto.user.UserDto;
 
 public class User {
 
+    private long userId;
     private String firstName;
     private String lastName;
     private String address;
@@ -12,10 +13,10 @@ public class User {
     private String password;
     private String location;
     private String role;
-    private String userId;
+    private String userGuid;
 
 
-    public User(String firstName, String lastName, String address, int flat, String login, String password, String location, String role, String userId) {
+    public User(long userId, String firstName, String lastName, String address, int flat, String login, String password, String location, String role, String userGuid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -24,7 +25,7 @@ public class User {
         this.password = password;
         this.location = location;
         this.role = role;
-        this.userId = userId;
+        this.userGuid = userGuid;
     }
 
     public UserDto toDto(){
@@ -37,8 +38,16 @@ public class User {
         dto.setPassword(password);
         dto.setLocation(location);
         dto.setRole(role);
-        dto.setUserId(userId);
+        dto.setUserId(userGuid);
         return dto;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -105,11 +114,11 @@ public class User {
         this.role = role;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserGuid() {
+        return userGuid;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserGuid(String userGuid) {
+        this.userGuid = userGuid;
     }
 }
