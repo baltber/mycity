@@ -19,7 +19,7 @@ public class OrganisationController {
     @RequestMapping(path = "/config/{guid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @ApiOperation(value = "Получить конфигурацию организации по GUID")
-    public String auth(@PathVariable("guid") String guid) {
+    public String getConfig(@PathVariable("guid") String guid) {
         return service.getOrganisationConfig(guid);
     }
 }

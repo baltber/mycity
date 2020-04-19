@@ -84,9 +84,9 @@ public class UserService {
         if (user.isPresent() && requestDto.getUserDto().getOrganisationGuid() != null){
             long orgId = organisationDao.getIdByGuid(requestDto.getUserDto().getOrganisationGuid());
             userDao.updateOrgId(user.get().getUserId(), orgId);
-            return null;
+            return createResponseOk();
         } else {
-            return null;
+            return createAddResponseNotFound();
         }
     }
 
@@ -123,6 +123,15 @@ public class UserService {
         ResultDto resultDto = new ResultDto();
         resultDto.setStatusCode("500");
         resultDto.setMessage("ERROR");
+        AddUserResponseDto responseDto = new AddUserResponseDto();
+        responseDto.setResultDto(resultDto);
+        return responseDto;
+    }
+
+    private AddUserResponseDto createAddResponseNotFound(){
+        ResultDto resultDto = new ResultDto();
+        resultDto.setStatusCode("404");
+        resultDto.setMessage("NOT_FOUND");
         AddUserResponseDto responseDto = new AddUserResponseDto();
         responseDto.setResultDto(resultDto);
         return responseDto;

@@ -38,7 +38,7 @@ public class UserController {
     @ResponseBody
     @ApiOperation(value = "Добавление пользователя в организацию")
     public AddUserResponseDto addUserToOrganisation(@RequestBody AddUserRequestDto requestDto) {
-        return service.add(requestDto);
+        return service.connectToOrganisation(requestDto);
     }
 }
 
