@@ -58,6 +58,7 @@ public class UserDaoImpl implements IUserDao {
             ps.setString(i++, user.getLocation());
             ps.setString(i++, user.getRole());
             ps.setString(i++, user.getUserGuid());
+            ps.setLong(i++, user.getOrganisationId());
             return ps;
         }, keyHolder);
 
@@ -92,7 +93,8 @@ public class UserDaoImpl implements IUserDao {
                 rs.getString("password"),
                 rs.getString("location"),
                 rs.getString("role"),
-                rs.getString("user_guid")
+                rs.getString("user_guid"),
+                rs.getLong("organisation_id")
 
         );
     }

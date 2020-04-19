@@ -1,2 +1,2 @@
-INSERT INTO auth.usr (first_name, last_name, address, flat, login, password, location, role, user_guid)
-VALUES (?, ?, ?, ?, ? ,? ,? ,?, ?);
+INSERT INTO auth.usr (first_name, last_name, address, flat, login, password, location, role, user_guid, organisation_id)
+VALUES (?, ?, ?, ?, ? ,? ,? ,?, ?, ?);

@@ -68,6 +68,11 @@ public class UserService {
         userDto.setPassword(pass);
         userDto.setUserId(userDto.getUserId() != null ? userDto.getUserId() : Utils.getUUID());
         userDto.setRole("user");
+        User user = userDto.toEntity();
+        if(userDto.getOrganisationGuid() != null){
+            long orgId = organisationDao.getIdByGuid(userDto.getOrganisationGuid());
+            user.setOrganisationId(orgId);
+        }
         long id =  userDao.save(userDto.toEntity());
         return id != 0 ? createResponseOk() : createResponseError();
     }

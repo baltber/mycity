@@ -14,9 +14,22 @@ public class User {
     private String location;
     private String role;
     private String userGuid;
+    private long organisationId;
 
+    public User(long userId,String firstName, String lastName, String address, int flat, String login, String password, String location, String role, String userGuid,
+                long organisationId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.flat = flat;
+        this.login = login;
+        this.password = password;
+        this.location = location;
+        this.role = role;
+        this.userGuid = userGuid;
+    }
 
-    public User(long userId, String firstName, String lastName, String address, int flat, String login, String password, String location, String role, String userGuid) {
+    public User(String firstName, String lastName, String address, int flat, String login, String password, String location, String role, String userGuid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -120,5 +133,13 @@ public class User {
 
     public void setUserGuid(String userGuid) {
         this.userGuid = userGuid;
+    }
+
+    public long getOrganisationId() {
+        return organisationId;
+    }
+
+    public void setOrganisationId(long organisationId) {
+        this.organisationId = organisationId;
     }
 }
