@@ -25,7 +25,12 @@ public class OrganisationDaoImpl implements IOrganisationDao {
 
     @Override
     public long getIdByGuid(String guid) {
-        return 0;
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/organisation/sql_get_id_by_guid.sql");
+        SqlParameterSource params = new MapSqlParameterSource("organisation_guid", guid);
+
+        Long res = jdbcTemplate.queryForObject(sql, params, Long.class);
+
+        return res != null ? res : 0;
     }
 
     @Override

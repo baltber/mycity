@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.controller.dto.user.*;
+import ru.mycity.core.controller.exception.BadRequestException;
 import ru.mycity.core.service.dao.IOrganisationDao;
 import ru.mycity.core.service.dao.IUserDao;
 import ru.mycity.core.service.dao.model.User;
@@ -61,7 +62,7 @@ public class UserService {
 
 
 
-    public AddUserResponseDto add(AddUserRequestDto requestDto){
+    public AddUserResponseDto add(AddUserRequestDto requestDto) throws BadRequestException {
         UserDto userDto = requestDto.getUserDto();
         //Закодируем пароль
         String pass = new BCryptPasswordEncoder().encode(userDto.getPassword());
@@ -73,8 +74,16 @@ public class UserService {
             long orgId = organisationDao.getIdByGuid(userDto.getOrganisationGuid());
             user.setOrganisationId(orgId);
         }
-        long id =  userDao.save(userDto.toEntity());
-        return id != 0 ? createResponseOk() : createResponseError();
+        try{
+            long id =  userDao.save(user);
+            if (id != 0){
+                return createResponseOk();
+            } else {
+                throw new BadRequestException();
+            }
+        } catch (Exception ex){
+            throw new BadRequestException();
+        }
     }
 
     public AddUserResponseDto connectToOrganisation(AddUserRequestDto requestDto){

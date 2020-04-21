@@ -9,6 +9,7 @@ import ru.mycity.core.controller.dto.user.AddUserRequestDto;
 import ru.mycity.core.controller.dto.user.AddUserResponseDto;
 import ru.mycity.core.controller.dto.user.AuthUserRequestDto;
 import ru.mycity.core.controller.dto.user.AuthUserResponseDto;
+import ru.mycity.core.controller.exception.BadRequestException;
 import ru.mycity.core.service.UserService;
 
 @Component
@@ -30,7 +31,7 @@ public class UserController {
     @RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @ApiOperation(value = "Добавление нового пользователя")
-    public AddUserResponseDto addUser(@RequestBody AddUserRequestDto requestDto) {
+    public AddUserResponseDto addUser(@RequestBody AddUserRequestDto requestDto) throws BadRequestException {
         return service.add(requestDto);
     }
 
