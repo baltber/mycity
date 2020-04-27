@@ -12,7 +12,7 @@ import ru.mycity.core.service.ComplaintService;
 import java.util.List;
 
 @Component
-//@RestController
+@RestController
 public class ComplaintController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class ComplaintController {
 
     @RequestMapping(path = "/complaint", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-//    @ApiOperation(value = "complaints")
+    @ApiOperation(value = "complaints")
     public List<ComplaintDto> getComplaints(@RequestParam(value = "category" , required = false) String category) {
         return service.getComplaints(category);
     }

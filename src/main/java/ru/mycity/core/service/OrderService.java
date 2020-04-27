@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.order.OrderList;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.dto.order.OrderResponseDto;
+import ru.mycity.core.controller.exception.NotFoundException;
+import ru.mycity.core.service.dao.IOrganisationDao;
 import ru.mycity.core.service.rest.JiraService;
 import ru.mycity.core.service.rest.dto.*;
 import ru.mycity.core.utils.JsonUtils;
@@ -18,19 +20,21 @@ public class OrderService {
     private JiraService jiraService;
     @Autowired
     private JsonUtils<OrderList> jsonUtils;
+    @Autowired
+    private IOrganisationDao organisationDao;
 
-    public String add(OrderRequestDto requestDto){
+    public String add(OrderRequestDto requestDto) throws NotFoundException {
 
         return jiraService.addOrder(toJiraRequest(requestDto));
 
     }
 
-    private JiraOrderRequest toJiraRequest(OrderRequestDto requestDto){
+    private JiraOrderRequest toJiraRequest(OrderRequestDto requestDto) throws NotFoundException {
 
         Fields fields = new Fields();
         Issuetype issuetype = new Issuetype("10011");
         fields.setIssuetype(issuetype);
-        Project project = new Project("10001");
+        Project project = new Project(String.valueOf(organisationDao.getProjectIdByGuid(requestDto.getOrganisationGuid())));
         fields.setProject(project);
 
         Content descriptionContent = createContent(jsonUtils.convertToJson(requestDto.getOrderList()).toString());

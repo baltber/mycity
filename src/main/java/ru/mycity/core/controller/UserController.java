@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import ru.mycity.core.controller.dto.user.AddUserRequestDto;
-import ru.mycity.core.controller.dto.user.AddUserResponseDto;
-import ru.mycity.core.controller.dto.user.AuthUserRequestDto;
-import ru.mycity.core.controller.dto.user.AuthUserResponseDto;
+import ru.mycity.core.controller.dto.user.*;
 import ru.mycity.core.controller.exception.BadRequestException;
+import ru.mycity.core.controller.exception.NotFoundException;
 import ru.mycity.core.service.UserService;
+
+import java.util.List;
 
 @Component
 @RestController
@@ -28,18 +28,33 @@ public class UserController {
         return service.auth(requestDto);
     }
 
+    @RequestMapping(path = "/admin/auth", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    @ApiOperation(value = "Авторизация")
+    public AuthUserResponseDto adminAuth(@RequestBody AuthUserRequestDto requestDto) {
+        return service.adminAuth(requestDto);
+    }
+
     @RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @ApiOperation(value = "Добавление нового пользователя")
-    public AddUserResponseDto addUser(@RequestBody AddUserRequestDto requestDto) throws BadRequestException {
+    public AddUserResponseDto addUser(@RequestBody AddUserRequestDto requestDto) throws BadRequestException, NotFoundException {
         return service.add(requestDto);
     }
 
     @RequestMapping(path = "/connect", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @ApiOperation(value = "Добавление пользователя в организацию")
-    public AddUserResponseDto addUserToOrganisation(@RequestBody AddUserRequestDto requestDto) {
+    public AddUserResponseDto addUserToOrganisation(@RequestBody AddUserRequestDto requestDto) throws NotFoundException {
         return service.connectToOrganisation(requestDto);
     }
+
+    @RequestMapping(path = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    @ApiOperation(value = "Получить список пользователей")
+    public List<UserDto> getUserList(@RequestBody UserDto userDto) {
+        return service.getUserList(userDto);
+    }
+
 }
 

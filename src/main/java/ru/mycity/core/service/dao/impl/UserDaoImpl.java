@@ -11,12 +11,17 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mycity.core.controller.dto.user.GetUserRequestDto;
+import ru.mycity.core.controller.dto.user.UserDto;
 import ru.mycity.core.service.dao.IUserDao;
 import ru.mycity.core.service.dao.model.User;
 import ru.mycity.core.service.dao.utils.ResourceUtils;
 
 import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 
 @Service
@@ -39,6 +44,24 @@ public class UserDaoImpl implements IUserDao {
         SqlParameterSource params = new MapSqlParameterSource("login", login);
 
         return getWithParams(sql, params);
+    }
+
+    @Override
+    public List<User> getUserList(UserDto userDto) {
+        StringJoiner where = new StringJoiner("", " WHERE true", "").setEmptyValue("");
+
+        if (userDto.getRole() != null) {
+            where.add(" AND role = :role");
+        }
+
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("role", userDto.getRole());
+
+        String sql = ResourceUtils.resourceAsString(getClass(),
+                "dao/user/sql_get_user_list.sql") + where;
+
+        return jdbcTemplate.query(sql, params, createRowMapper());
     }
 
     @Override
@@ -94,7 +117,7 @@ public class UserDaoImpl implements IUserDao {
                 rs.getString("location"),
                 rs.getString("role"),
                 rs.getString("user_guid"),
-                rs.getLong("organisation_id")
+                rs.getString("organisation_guid")
 
         );
     }

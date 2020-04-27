@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.order.OrderDto;
 import ru.mycity.core.controller.dto.order.OrderList;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
+import ru.mycity.core.controller.exception.NotFoundException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -17,14 +18,14 @@ public class StringOrderService {
     @Autowired
     private OrderService orderService;
 
-    public String add(String request){
+    public String add(String request, String organisationGuid) throws NotFoundException {
         String decode = null;
         try {
             decode = URLDecoder.decode(request, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        OrderRequestDto requestDto = mapToOrder(requestToMap(decode));
+        OrderRequestDto requestDto = mapToOrder(requestToMap(decode, organisationGuid));
         return orderService.add(requestDto);
     }
 
@@ -38,6 +39,7 @@ public class StringOrderService {
         requestDto.setEmail(map.get("email"));
         requestDto.setAddress(map.get("address"));
         requestDto.setComment(map.get("comment"));
+        requestDto.setOrganisationGuid(map.get("organisation_guid"));
 
         OrderList orderList = new OrderList(createListOrder(map));
         orderList.setDelivery(map.get("payment[delivery]"));
@@ -69,7 +71,7 @@ public class StringOrderService {
     }
 
 
-    public Map<String, String> requestToMap(String s){
+    public Map<String, String> requestToMap(String s, String organisationGuid){
 
         String [] split = s.split("&");
         String deliveryPriceString = Arrays.stream(split)
@@ -83,6 +85,7 @@ public class StringOrderService {
                 .collect(Collectors.toMap(a -> a[0], a -> a[1]));
 
         map.put("delivery_price", deliveryPriceString.trim());
+        map.put("organisation_guid", organisationGuid);
         return new LinkedHashMap<>(map);
 
     }

@@ -24,7 +24,7 @@ public class UrlEncodeTest {
         System.out.println(s2);
 
         StringOrderService stringOrderService = new StringOrderService();
-        Map<String, String> map = stringOrderService.requestToMap(s);
+        Map<String, String> map = stringOrderService.requestToMap(s, "");
         OrderRequestDto dto = stringOrderService.mapToOrder(map);
         System.out.println(map);
     }

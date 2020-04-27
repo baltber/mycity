@@ -22,6 +22,8 @@ public class OrderRequestDto {
     private String comment;
     @ApiModelProperty(value = "Данные заказа")
     private OrderList orderList;
+    @ApiModelProperty(value = "GUID оргаизации")
+    private String organisationGuid;
 
     public OrderRequestDto() {
     }
@@ -88,5 +90,13 @@ public class OrderRequestDto {
 
     public void setOrderList(OrderList orderList) {
         this.orderList = orderList;
+    }
+
+    public String getOrganisationGuid() {
+        return organisationGuid;
+    }
+
+    public void setOrganisationGuid(String organisationGuid) {
+        this.organisationGuid = organisationGuid;
     }
 }

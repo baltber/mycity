@@ -13,12 +13,15 @@ import org.springframework.stereotype.Service;
 import ru.mycity.core.controller.dto.ResultDto;
 import ru.mycity.core.controller.dto.user.*;
 import ru.mycity.core.controller.exception.BadRequestException;
+import ru.mycity.core.controller.exception.NotFoundException;
 import ru.mycity.core.service.dao.IOrganisationDao;
 import ru.mycity.core.service.dao.IUserDao;
 import ru.mycity.core.service.dao.model.User;
 import ru.mycity.core.utils.Utils;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -48,6 +51,15 @@ public class UserService {
         }
     }
 
+    public AuthUserResponseDto adminAuth(AuthUserRequestDto requestDto){
+        try{
+            return getUserByLogin(requestDto.getLogin());
+        } catch (AuthenticationException ex){
+            log.error(ex.getMessage(), ex);
+            return createAuthResponseUnauthorized();
+        }
+    }
+
     public AuthUserResponseDto getUserByLogin(String login){
          Optional <UserDto> user = userDao.getUserByLogin(login)
                 .stream()
@@ -60,9 +72,17 @@ public class UserService {
          }
     }
 
+    public List<UserDto> getUserList(UserDto userDto){
+
+        return userDao.getUserList(userDto)
+                .stream()
+                .map(User::toDto)
+                .collect(Collectors.toList());
+    }
 
 
-    public AddUserResponseDto add(AddUserRequestDto requestDto) throws BadRequestException {
+
+    public AddUserResponseDto add(AddUserRequestDto requestDto) throws BadRequestException, NotFoundException {
         UserDto userDto = requestDto.getUserDto();
         //Закодируем пароль
         String pass = new BCryptPasswordEncoder().encode(userDto.getPassword());
@@ -86,7 +106,7 @@ public class UserService {
         }
     }
 
-    public AddUserResponseDto connectToOrganisation(AddUserRequestDto requestDto){
+    public AddUserResponseDto connectToOrganisation(AddUserRequestDto requestDto) throws NotFoundException {
         Optional <User> user = userDao.getUserByLogin(requestDto.getUserDto().getLogin())
                 .stream().findFirst();
 
