@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import ru.mycity.core.controller.dto.order.FullOrderDto;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.exception.NotFoundException;
 import ru.mycity.core.service.OrderService;
 import ru.mycity.core.service.StringOrderService;
+import ru.mycity.core.service.rest.dto.JiraSearchResponse;
 
 @Component
 @RestController
@@ -42,6 +44,16 @@ public class OrderController {
         }
 
         return "OK";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Получить список заказов")
+    public FullOrderDto addOrder(@RequestParam("guid") String guid,
+                                 @RequestParam("state") String state,
+                                 @RequestParam(value = "start", required = false) int start,
+                                 @RequestParam(value = "size", required = false) int size
+                                       ) throws NotFoundException {
+        return service.getListOrder(guid, state, start, size);
     }
 
 }
