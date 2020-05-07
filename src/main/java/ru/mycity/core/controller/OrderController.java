@@ -45,7 +45,6 @@ public class OrderController {
 
         return "OK";
     }
-
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Получить список заказов")
     public FullOrderDto addOrder(@RequestParam("guid") String guid,

@@ -89,6 +89,16 @@ public class UserService {
         userDto.setPassword(pass);
         userDto.setUserId(userDto.getUserId() != null ? userDto.getUserId() : Utils.getUUID());
         userDto.setRole("user");
+        return addUser(userDto);
+    }
+
+    public AddUserResponseDto addAdmin(AddUserRequestDto requestDto) throws BadRequestException, NotFoundException {
+        UserDto userDto = requestDto.getUserDto();
+        userDto.setUserId(userDto.getUserId() != null ? userDto.getUserId() : Utils.getUUID());
+        return addUser(userDto);
+    }
+
+    public AddUserResponseDto addUser(UserDto userDto) throws BadRequestException, NotFoundException {
         User user = userDto.toEntity();
         if(userDto.getOrganisationGuid() != null){
             long orgId = organisationDao.getIdByGuid(userDto.getOrganisationGuid());

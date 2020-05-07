@@ -3,6 +3,8 @@ package ru.mycity.core;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.web.util.UriUtils;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.service.StringOrderService;
@@ -26,5 +28,15 @@ public class UrlEncodeTest {
 
 
         Assert.assertEquals("s.tailakov@gmail.com",dto.getEmail());
+
+        StandardPasswordEncoder encoder = new StandardPasswordEncoder();
+        encoder.matches("admin5", "$2a$10$spNjgYcGLR6EG52ig5AAd.Wr4YlEfoyf42JU./KAXWcbb721W/zsm");
+    }
+
+    @Test
+    public void cryptTest(){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String is = encoder.encode("admin5");
+        Assert.assertEquals("$2a$10$spNjgYcGLR6EG52ig5AAd.Wr4YlEfoyf42JU./KAXWcbb721W/zsm", is);
     }
 }

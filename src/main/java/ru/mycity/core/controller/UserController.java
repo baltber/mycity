@@ -42,6 +42,13 @@ public class UserController {
         return service.add(requestDto);
     }
 
+    @RequestMapping(path = "/admin/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    @ApiOperation(value = "Добавление нового пользователя")
+    public AddUserResponseDto addUserAdmin(@RequestBody AddUserRequestDto requestDto) throws BadRequestException, NotFoundException {
+        return service.addAdmin(requestDto);
+    }
+
     @RequestMapping(path = "/connect", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @ApiOperation(value = "Добавление пользователя в организацию")
