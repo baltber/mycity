@@ -47,9 +47,7 @@ public class StatDaoImpl implements IStatDao {
         long orderStatId=createOrderStat(order.getOrderStat());
 
         SqlParameterSource params = new MapSqlParameterSource("order_stat_id", orderStatId)
-                .addValue("order_date", Utils.createTimestampNow())
-                .addValue("inner_id", order.getInnerId())
-                .addValue("client_order_id", order.getClientOrderId());
+                .addValue("order_date", Utils.createTimestampNow());
 
         jdbcTemplate.update(sql, params, kh, new String[]{"order_id"});
 
@@ -59,7 +57,7 @@ public class StatDaoImpl implements IStatDao {
     public long createOrderStat(OrderStat orderStat){
         KeyHolder kh = new GeneratedKeyHolder();
 
-        String sql = ResourceUtils.resourceAsString(getClass(),"dao/organisation/sql_insert_order_stat.sql");
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_insert_order_stat.sql");
 
         SqlParameterSource params = new MapSqlParameterSource("order_price", orderStat.getOrderPrice())
                 .addValue("delivery_price", orderStat.getDeliveryPrice())
@@ -79,7 +77,7 @@ public class StatDaoImpl implements IStatDao {
         String sql = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_insert_dish_stat.sql");
 
         SqlParameterSource params = new MapSqlParameterSource("dish_name", dishStat.getDishName())
-                .addValue("count", dishStat.getCount())
+                .addValue("count", Integer.valueOf(dishStat.getCount()))
                 .addValue("order_id", orderId);
 
         jdbcTemplate.update(sql, params);

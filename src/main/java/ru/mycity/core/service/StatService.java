@@ -21,6 +21,11 @@ public class StatService {
 
     private IStatDao statDao;
 
+    @Autowired
+    public StatService(IStatDao statDao) {
+        this.statDao = statDao;
+    }
+
     public long saveOrder(OrderRequestDto requestDto){
         return statDao.createOrder(toStatEntity(requestDto));
     }
@@ -46,10 +51,7 @@ public class StatService {
                 .collect(Collectors.toList());
     }
 
-    @Autowired
-    public StatService(IStatDao statDao) {
-        this.statDao = statDao;
-    }
+
 
     public OrderStatDto getListOrderStat(String startDate, String endDate){
 

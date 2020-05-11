@@ -26,14 +26,17 @@ public class Utils {
 
 
     public static Date createDate(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date parsedDate = null;
-        try {
-            parsedDate = dateFormat.parse(date);
-        } catch (ParseException e) {
-            log.error(e.getMessage(), e);
+        if(date != null){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = null;
+            try {
+                parsedDate = dateFormat.parse(date);
+            } catch (ParseException e) {
+                log.error(e.getMessage(), e);
+            }
+            return parsedDate;
         }
-        return parsedDate;
+       return null;
     }
 
     public static DateTimeModel getDateTime(Date startDate, Date endDate) {
