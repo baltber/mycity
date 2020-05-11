@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mycity.core.controller.exception.NotFoundException;
 import ru.mycity.core.service.dao.IOrganisationDao;
 import ru.mycity.core.service.dao.model.Complaint;
@@ -15,6 +17,7 @@ import ru.mycity.core.service.dao.utils.ResourceUtils;
 import java.util.List;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class OrganisationDaoImpl implements IOrganisationDao {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;

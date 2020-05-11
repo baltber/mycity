@@ -13,6 +13,7 @@ public class OrderList {
 
 
 
+
     public OrderList() {
     }
 
@@ -51,4 +52,5 @@ public class OrderList {
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
+
 }

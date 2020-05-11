@@ -15,6 +15,7 @@ public class FullOrderDto {
     @JsonProperty("orders")
     private List<OrderRequestDto> orders;
 
+
     public FullOrderDto(int start, int size, int total) {
         this.start = start;
         this.size = size;
@@ -55,4 +56,5 @@ public class FullOrderDto {
     public void setOrders(List<OrderRequestDto> orders) {
         this.orders = orders;
     }
+
 }
