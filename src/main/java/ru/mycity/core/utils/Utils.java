@@ -51,4 +51,7 @@ public class Utils {
         return new Timestamp(calendar.getTimeInMillis());
     }
 
+    public static Timestamp createTimestampNow() {
+        return new Timestamp(System.currentTimeMillis());
+    }
 }
