@@ -1,19 +1,20 @@
 package ru.mycity.core.service.dao.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Order {
 
     private String innerId;
     private String clientOrderId;
-    private DishStat dishStat;
+    private List<DishStat> dishStat;
     private OrderStat orderStat;
     private Timestamp orderDate;
 
     public Order() {
     }
 
-    public Order(String innerId, String clientOrderId, DishStat dishStat, OrderStat orderStat, Timestamp orderDate) {
+    public Order(String innerId, String clientOrderId, List<DishStat> dishStat, OrderStat orderStat, Timestamp orderDate) {
         this.innerId = innerId;
         this.clientOrderId = clientOrderId;
         this.dishStat = dishStat;
@@ -37,11 +38,11 @@ public class Order {
         this.clientOrderId = clientOrderId;
     }
 
-    public DishStat getDishStat() {
+    public List<DishStat> getDishStat() {
         return dishStat;
     }
 
-    public void setDishStat(DishStat dishStat) {
+    public void setDishStat(List<DishStat> dishStat) {
         this.dishStat = dishStat;
     }
 

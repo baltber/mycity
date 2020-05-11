@@ -28,8 +28,13 @@ public class OrderService {
     private JsonUtils<OrderList> jsonUtils;
     @Autowired
     private IOrganisationDao organisationDao;
+    @Autowired
+    private StatService statService;
 
     public String add(OrderRequestDto requestDto) throws NotFoundException {
+
+        //Сохраним статистику
+        statService.saveOrder(requestDto);
 
         return jiraService.addOrder(toJiraRequest(requestDto));
 

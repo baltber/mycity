@@ -23,27 +23,30 @@ import java.util.StringJoiner;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
-public class IStatDaoImpl implements IStatDao {
+public class StatDaoImpl implements IStatDao {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public IStatDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public StatDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     @Override
     public long createOrder(Order order) {
+        long orderId = createOrderInner(order);
+        createDishStatList(order.getDishStat(), orderId);
+        return orderId;
+    }
+
+
+    public long createOrderInner(Order order) {
         KeyHolder kh = new GeneratedKeyHolder();
 
-        String sql = ResourceUtils.resourceAsString(getClass(),"dao/organisation/sql_get_config_by_guid.sql");
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_insert_order.sql");
         long orderStatId=createOrderStat(order.getOrderStat());
-        long dishStatId=createDishStat(order.getDishStat());
-
 
         SqlParameterSource params = new MapSqlParameterSource("order_stat_id", orderStatId)
-                .addValue("dish_stat_id", dishStatId)
                 .addValue("order_date", Utils.createTimestampNow())
                 .addValue("inner_id", order.getInnerId())
                 .addValue("client_order_id", order.getClientOrderId());
@@ -56,7 +59,7 @@ public class IStatDaoImpl implements IStatDao {
     public long createOrderStat(OrderStat orderStat){
         KeyHolder kh = new GeneratedKeyHolder();
 
-        String sql = ResourceUtils.resourceAsString(getClass(),"dao/organisation/sql_get_config_by_guid.sql");
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/organisation/sql_insert_order_stat.sql");
 
         SqlParameterSource params = new MapSqlParameterSource("order_price", orderStat.getOrderPrice())
                 .addValue("delivery_price", orderStat.getDeliveryPrice())
@@ -67,17 +70,20 @@ public class IStatDaoImpl implements IStatDao {
         return kh.getKey().longValue();
     }
 
-    public long createDishStat(DishStat dishStat){
-        KeyHolder kh = new GeneratedKeyHolder();
+    public void createDishStatList(List<DishStat> list, long orderId){
+        list.forEach(e->createDishStat(e, orderId));
+    }
 
-        String sql = ResourceUtils.resourceAsString(getClass(),"dao/organisation/sql_get_config_by_guid.sql");
+    public void createDishStat(DishStat dishStat, long orderId){
+
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_insert_dish_stat.sql");
 
         SqlParameterSource params = new MapSqlParameterSource("dish_name", dishStat.getDishName())
-                .addValue("count", dishStat.getCount());
+                .addValue("count", dishStat.getCount())
+                .addValue("order_id", orderId);
 
-        jdbcTemplate.update(sql, params, kh, new String[]{"dish_stat_id"});
+        jdbcTemplate.update(sql, params);
 
-        return kh.getKey().longValue();
     }
 
     @Override

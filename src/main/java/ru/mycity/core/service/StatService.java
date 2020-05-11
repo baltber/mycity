@@ -2,10 +2,14 @@ package ru.mycity.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.mycity.core.controller.dto.order.OrderList;
+import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.dto.stat.DailyOrderStatDto;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
 import ru.mycity.core.service.dao.IStatDao;
 import ru.mycity.core.service.dao.model.DateTimeModel;
+import ru.mycity.core.service.dao.model.DishStat;
+import ru.mycity.core.service.dao.model.Order;
 import ru.mycity.core.service.dao.model.OrderStat;
 import ru.mycity.core.utils.Utils;
 
@@ -17,6 +21,31 @@ public class StatService {
 
     private IStatDao statDao;
 
+    public long saveOrder(OrderRequestDto requestDto){
+        return statDao.createOrder(toStatEntity(requestDto));
+    }
+
+    private Order toStatEntity(OrderRequestDto requestDto){
+        Order order = new Order();
+        order.setClientOrderId(requestDto.getSummary());
+        order.setOrderStat(toStatEntity(requestDto.getOrderList()));
+        order.setDishStat(toDishStatList(requestDto.getOrderList()));
+        return order;
+    }
+
+    private OrderStat toStatEntity(OrderList orderList){
+        int orderPrice = orderList.getTotalPrice() - orderList.getDeliveryPrice();
+        return new OrderStat(orderPrice,
+                orderList.getDeliveryPrice(),
+                orderList.getTotalPrice());
+    }
+
+    private List<DishStat> toDishStatList(OrderList orderList){
+        return orderList.getOrderDtoList().stream()
+                .map(e-> new DishStat(e.getName(), String.valueOf(e.getQuantity())))
+                .collect(Collectors.toList());
+    }
+
     @Autowired
     public StatService(IStatDao statDao) {
         this.statDao = statDao;
@@ -26,10 +55,10 @@ public class StatService {
 
         DateTimeModel dateTimeModel = Utils.getDateTime(startDate, endDate);
 
-        return createOrderStat(statDao.getOrderStatList(dateTimeModel));
+        return createOrderStatDto(statDao.getOrderStatList(dateTimeModel));
     }
 
-    public OrderStatDto createOrderStat(List<OrderStat> list){
+    public OrderStatDto createOrderStatDto(List<OrderStat> list){
         return new OrderStatDto(
                 sumOrder(list),
                 sumDelivery(list),
