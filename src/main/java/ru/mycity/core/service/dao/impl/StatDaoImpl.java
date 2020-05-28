@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mycity.core.service.dao.IStatDao;
+import ru.mycity.core.service.dao.Querry;
 import ru.mycity.core.service.dao.model.DateTimeModel;
 import ru.mycity.core.service.dao.model.DishStat;
 import ru.mycity.core.service.dao.model.Order;
@@ -85,20 +86,18 @@ public class StatDaoImpl implements IStatDao {
     }
 
     @Override
-    public List<OrderStat> getOrderStatList(DateTimeModel dateTime) {
-        StringJoiner where = (new StringJoiner("", " WHERE ", "")).setEmptyValue("");
-        where.add(" 1 = 1");
-
-        if (dateTime.getStartDate() != null && dateTime.getEndDate() != null) {
-            where.add(" AND order_date BETWEEN :start_date AND :end_date");
-        } else if(dateTime.getStartDate() != null){
-            where.add(" AND order_date >= :start_date");
-        }
+    public List<OrderStat> getOrderStatList(DateTimeModel dateTime, Integer size, Integer start) {
+        StringJoiner where = new Querry().init()
+                .withDates(dateTime)
+                .withPageable(size, start)
+                .build();
 
         String sql = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_get_order_stat.sql")
                 + where;
         SqlParameterSource params = new MapSqlParameterSource("start_date", dateTime.getStartDate())
-                .addValue("end_date", dateTime.getEndDate());
+                .addValue("end_date", dateTime.getEndDate())
+                .addValue("limit", size)
+                .addValue("offset", start);
 
         return jdbcTemplate.query(sql, params, createRowMapper());
     }

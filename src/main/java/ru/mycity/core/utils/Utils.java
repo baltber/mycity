@@ -20,21 +20,15 @@ public class Utils {
         return uuid.toString();
     }
 
-    public static DateTimeModel getDateTime(String startDate, String endDate) {
+    public static DateTimeModel getDateTime(String startDate, String endDate) throws ParseException {
         return getDateTime(createDate(startDate), createDate(endDate));
     }
 
 
-    public static Date createDate(String date) {
+    public static Date createDate(String date) throws ParseException {
         if(date != null){
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsedDate = null;
-            try {
-                parsedDate = dateFormat.parse(date);
-            } catch (ParseException e) {
-                log.error(e.getMessage(), e);
-            }
-            return parsedDate;
+            return dateFormat.parse(date);
         }
        return null;
     }

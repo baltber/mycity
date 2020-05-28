@@ -1,13 +1,9 @@
 package ru.mycity.core.controller.dto.stat;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DailyOrderStatDto {
-    @JsonProperty("order_price")
     private int orderPrice;
-    @JsonProperty("delivery_price")
     private int deliveryPrice;
-    @JsonProperty("total_price")
     private int totalPrice;
 
     public DailyOrderStatDto() {

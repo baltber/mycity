@@ -9,6 +9,6 @@ import java.util.List;
 public interface IStatDao {
 
     long createOrder(Order order);
-    List<OrderStat> getOrderStatList(DateTimeModel dateTimeModel);
+    List<OrderStat> getOrderStatList(DateTimeModel dateTimeModel, Integer size, Integer start);
 
 }

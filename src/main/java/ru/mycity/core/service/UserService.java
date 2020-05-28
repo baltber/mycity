@@ -109,10 +109,10 @@ public class UserService {
             if (id != 0){
                 return createResponseOk();
             } else {
-                throw new BadRequestException();
+                throw new BadRequestException("Ошибка добавления нового пользователя");
             }
         } catch (Exception ex){
-            throw new BadRequestException();
+            throw new BadRequestException("Неизвестная ошибка");
         }
     }
 

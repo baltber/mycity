@@ -6,7 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
+import ru.mycity.core.controller.exception.BadRequestException;
 import ru.mycity.core.service.StatService;
+
+import java.text.ParseException;
 
 @Component
 @RestController
@@ -18,8 +21,16 @@ public class StatController {
 
     @RequestMapping(path = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    @ApiOperation(value = "Получить конфигурацию организации по GUID")
-    public OrderStatDto getConfig() {
-        return statService.getListOrderStat(null, null);
+    @ApiOperation(value = "Получить статистику сумм заказов")
+    public OrderStatDto getPriceStat(@RequestParam(value = "startDate", required = false) String startDate,
+                                     @RequestParam(value = "endDate", required = false) String endDate,
+                                     @RequestParam(value = "start", required = false) Integer start,
+                                     @RequestParam(value = "size", required = false) Integer size
+                                     ) throws BadRequestException {
+        try {
+            return statService.getListOrderStat(startDate, endDate, start, size);
+        } catch (ParseException e) {
+            throw new BadRequestException("Неверный формат даты");
+        }
     }
 }

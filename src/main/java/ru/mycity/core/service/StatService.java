@@ -6,6 +6,7 @@ import ru.mycity.core.controller.dto.order.OrderList;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.dto.stat.DailyOrderStatDto;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
+import ru.mycity.core.controller.exception.BadRequestException;
 import ru.mycity.core.service.dao.IStatDao;
 import ru.mycity.core.service.dao.model.DateTimeModel;
 import ru.mycity.core.service.dao.model.DishStat;
@@ -13,6 +14,7 @@ import ru.mycity.core.service.dao.model.Order;
 import ru.mycity.core.service.dao.model.OrderStat;
 import ru.mycity.core.utils.Utils;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,11 +55,12 @@ public class StatService {
 
 
 
-    public OrderStatDto getListOrderStat(String startDate, String endDate){
+    public OrderStatDto getListOrderStat(String startDate, String endDate, Integer size, Integer start) throws ParseException {
 
-        DateTimeModel dateTimeModel = Utils.getDateTime(startDate, endDate);
+        DateTimeModel dateTimeModel = null;
+        dateTimeModel = Utils.getDateTime(startDate, endDate);
+        return createOrderStatDto(statDao.getOrderStatList(dateTimeModel, size, start));
 
-        return createOrderStatDto(statDao.getOrderStatList(dateTimeModel));
     }
 
     public OrderStatDto createOrderStatDto(List<OrderStat> list){

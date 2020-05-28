@@ -25,7 +25,7 @@ public class JiraService {
     public String addOrder(JiraOrderRequest orderRequest){
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Cookie", config.getJiraApiCookie());
+        headers.set("Authorization", config.getJiraHeaderAuth());
         HttpEntity<JiraOrderRequest> request = new HttpEntity<>(orderRequest, headers);
         log.info("HTTP Request to Jira API: " + new JsonUtils<JiraOrderRequest>().convertToJson(orderRequest).toString());
        return restTemplate.postForObject(config.getJiraApiUrl() + "/issue", request, String.class);
@@ -35,7 +35,7 @@ public class JiraService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Cookie", config.getJiraApiCookie());
+        headers.set("Authorization", config.getJiraHeaderAuth());
         HttpEntity<String> request = new HttpEntity<>(jqlRequest, headers);
         log.info("HTTP Request to Jira API: " + request);
         return restTemplate.postForObject(config.getJiraApiUrl() + "/search", request, JiraSearchResponse.class);
