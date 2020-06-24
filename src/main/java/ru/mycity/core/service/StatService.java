@@ -2,16 +2,13 @@ package ru.mycity.core.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.mycity.core.controller.dto.PageableDto;
 import ru.mycity.core.controller.dto.order.OrderList;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.dto.stat.DailyOrderStatDto;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
-import ru.mycity.core.controller.exception.BadRequestException;
 import ru.mycity.core.service.dao.IStatDao;
-import ru.mycity.core.service.dao.model.DateTimeModel;
-import ru.mycity.core.service.dao.model.DishStat;
-import ru.mycity.core.service.dao.model.Order;
-import ru.mycity.core.service.dao.model.OrderStat;
+import ru.mycity.core.service.dao.model.*;
 import ru.mycity.core.utils.Utils;
 
 import java.text.ParseException;
@@ -55,11 +52,17 @@ public class StatService {
 
 
 
-    public OrderStatDto getListOrderStat(String startDate, String endDate, Integer size, Integer start) throws ParseException {
+    public PageableDto<OrderStatDto> getListOrderStat(String startDate, String endDate, Integer size, Integer start) throws ParseException {
 
         DateTimeModel dateTimeModel = null;
         dateTimeModel = Utils.getDateTime(startDate, endDate);
-        return createOrderStatDto(statDao.getOrderStatList(dateTimeModel, size, start));
+
+        QuerryResult<List<OrderStat >> queryResult = statDao.getOrderStatList(dateTimeModel, size, start);
+
+        OrderStatDto orderStatDto = createOrderStatDto(queryResult.getT());
+
+        return new PageableDto<>(orderStatDto, queryResult.getSize(),
+                queryResult.getStart(), queryResult.getTotal());
 
     }
 

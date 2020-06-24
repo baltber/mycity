@@ -15,6 +15,8 @@ public class Querry {
     }
 
     public Querry withPageable(Integer limit, Integer start){
+
+        addDefaultValues(limit, start);
         if(limit != null){
             where.add(" limit :limit");
         }
@@ -23,6 +25,16 @@ public class Querry {
         }
         return this;
 
+    }
+
+    private void addDefaultValues(Integer limit, Integer start){
+        if(limit==null){
+            limit=10;
+        }
+
+        if(start==null){
+            start=0;
+        }
     }
 
     public Querry withDates(DateTimeModel dateTime){

@@ -12,13 +12,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mycity.core.service.dao.IStatDao;
 import ru.mycity.core.service.dao.Querry;
-import ru.mycity.core.service.dao.model.DateTimeModel;
-import ru.mycity.core.service.dao.model.DishStat;
-import ru.mycity.core.service.dao.model.Order;
-import ru.mycity.core.service.dao.model.OrderStat;
+import ru.mycity.core.service.dao.model.*;
 import ru.mycity.core.service.dao.utils.ResourceUtils;
 import ru.mycity.core.utils.Utils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -86,7 +84,8 @@ public class StatDaoImpl implements IStatDao {
     }
 
     @Override
-    public List<OrderStat> getOrderStatList(DateTimeModel dateTime, Integer size, Integer start) {
+    public  QuerryResult<List<OrderStat>> getOrderStatList(DateTimeModel dateTime, Integer size, Integer start) {
+
         StringJoiner where = new Querry().init()
                 .withDates(dateTime)
                 .withPageable(size, start)
@@ -98,8 +97,14 @@ public class StatDaoImpl implements IStatDao {
                 .addValue("end_date", dateTime.getEndDate())
                 .addValue("limit", size)
                 .addValue("offset", start);
+        List<OrderStat> list = jdbcTemplate.query(sql, params, createRowMapper());
 
-        return jdbcTemplate.query(sql, params, createRowMapper());
+        String sqlTotal = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_get_order_stat_total.sql");
+
+        Long total = jdbcTemplate.queryForObject(sqlTotal, new HashMap<>(), Long.class);
+
+
+        return new QuerryResult<>(list, size, start, total);
     }
 
     private RowMapper<OrderStat> createRowMapper(){
