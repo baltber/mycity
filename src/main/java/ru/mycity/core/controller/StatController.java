@@ -6,11 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.mycity.core.controller.dto.PageableDto;
+import ru.mycity.core.controller.dto.stat.DishStatDto;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
 import ru.mycity.core.controller.exception.BadRequestException;
 import ru.mycity.core.service.StatService;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Component
 @RestController
@@ -20,7 +22,7 @@ public class StatController {
     @Autowired
     private StatService statService;
 
-    @RequestMapping(path = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/price", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @ApiOperation(value = "Получить статистику сумм заказов")
     public PageableDto<OrderStatDto> getPriceStat(@RequestParam(value = "startDate", required = false) String startDate,
@@ -38,6 +40,20 @@ public class StatController {
                 start=defaultStart;
             }
             return statService.getListOrderStat(startDate, endDate, size, start);
+        } catch (ParseException e) {
+            throw new BadRequestException("Неверный формат даты");
+        }
+    }
+
+    @RequestMapping(path = "/dish", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    @ApiOperation(value = "Получить статистику блюд")
+    public List<DishStatDto> getDishStat(@RequestParam(value = "startDate", required = false) String startDate,
+                                                      @RequestParam(value = "endDate", required = false) String endDate
+    ) throws BadRequestException {
+        try {
+
+            return statService.getListDishStat(startDate, endDate);
         } catch (ParseException e) {
             throw new BadRequestException("Неверный формат даты");
         }

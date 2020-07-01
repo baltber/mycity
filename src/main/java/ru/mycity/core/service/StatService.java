@@ -6,12 +6,14 @@ import ru.mycity.core.controller.dto.PageableDto;
 import ru.mycity.core.controller.dto.order.OrderList;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.dto.stat.DailyOrderStatDto;
+import ru.mycity.core.controller.dto.stat.DishStatDto;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
 import ru.mycity.core.service.dao.IStatDao;
 import ru.mycity.core.service.dao.model.*;
 import ru.mycity.core.utils.Utils;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,63 @@ public class StatService {
 
     public long saveOrder(OrderRequestDto requestDto){
         return statDao.createOrder(toStatEntity(requestDto));
+    }
+
+    public PageableDto<OrderStatDto> getListOrderStat(String startDate, String endDate, Integer size, Integer start) throws ParseException {
+
+        DateTimeModel dateTimeModel = null;
+        dateTimeModel = Utils.getDateTime(startDate, endDate);
+
+        QuerryResult<List<OrderStat >> queryResult = statDao.getOrderStatList(dateTimeModel, size, start);
+
+        OrderStatDto orderStatDto = createOrderStatDto(queryResult.getT());
+
+        return new PageableDto<>(orderStatDto, queryResult.getSize(),
+                queryResult.getStart(), queryResult.getTotal());
+
+    }
+
+    public List<DishStatDto> getListDishStat(String startDate, String endDate) throws ParseException {
+
+        DateTimeModel dateTimeModel = null;
+        dateTimeModel = Utils.getDateTime(startDate, endDate);
+
+        List<DishStat>queryResult = statDao.getDishStatList(dateTimeModel);
+
+        return createDishStatDto(groupByDish(queryResult));
+
+    }
+
+    public OrderStatDto createOrderStatDto(List<OrderStat> list){
+        return new OrderStatDto(
+                sumOrder(list),
+                sumDelivery(list),
+                sumTotal(list),
+                avgOrder(list),
+                toListDto(list));
+    }
+
+    public List<DishStat> groupByDish(List<DishStat> list){
+        List<DishStat> res = new ArrayList<>();
+
+        list.stream()
+                .collect(Collectors.groupingBy(DishStat::getDishName, Collectors.summingInt(DishStat::getCount)))
+                .forEach((id,sumTargetCost)->res.add(new DishStat(id, sumTargetCost)));
+
+        return res;
+
+    }
+
+    public List<DishStatDto> createDishStatDto(List<DishStat> list){
+        return list.stream()
+                .map(DishStat::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private List<DailyOrderStatDto> toListDto(List<OrderStat> list){
+        return list.stream()
+                .map(OrderStat::toDto)
+                .collect(Collectors.toList());
     }
 
     private Order toStatEntity(OrderRequestDto requestDto){
@@ -46,38 +105,7 @@ public class StatService {
 
     private List<DishStat> toDishStatList(OrderList orderList){
         return orderList.getOrderDtoList().stream()
-                .map(e-> new DishStat(e.getName(), String.valueOf(e.getQuantity())))
-                .collect(Collectors.toList());
-    }
-
-
-
-    public PageableDto<OrderStatDto> getListOrderStat(String startDate, String endDate, Integer size, Integer start) throws ParseException {
-
-        DateTimeModel dateTimeModel = null;
-        dateTimeModel = Utils.getDateTime(startDate, endDate);
-
-        QuerryResult<List<OrderStat >> queryResult = statDao.getOrderStatList(dateTimeModel, size, start);
-
-        OrderStatDto orderStatDto = createOrderStatDto(queryResult.getT());
-
-        return new PageableDto<>(orderStatDto, queryResult.getSize(),
-                queryResult.getStart(), queryResult.getTotal());
-
-    }
-
-    public OrderStatDto createOrderStatDto(List<OrderStat> list){
-        return new OrderStatDto(
-                sumOrder(list),
-                sumDelivery(list),
-                sumTotal(list),
-                avgOrder(list),
-                toListDto(list));
-    }
-
-    private List<DailyOrderStatDto> toListDto(List<OrderStat> list){
-        return list.stream()
-                .map(OrderStat::toDto)
+                .map(e-> new DishStat(e.getName(), Integer.valueOf(e.getQuantity())))
                 .collect(Collectors.toList());
     }
 

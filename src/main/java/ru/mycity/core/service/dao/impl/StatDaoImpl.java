@@ -107,10 +107,31 @@ public class StatDaoImpl implements IStatDao {
         return new QuerryResult<>(list, size, start, total);
     }
 
+    @Override
+    public List<DishStat> getDishStatList(DateTimeModel dateTime) {
+
+        StringJoiner where = new Querry().init()
+                .withDates(dateTime)
+                .build();
+
+        String sql = ResourceUtils.resourceAsString(getClass(),"dao/stat/sql_get_dish_stat.sql")
+                + where;
+        SqlParameterSource params = new MapSqlParameterSource("start_date", dateTime.getStartDate())
+                .addValue("end_date", dateTime.getEndDate());
+        List<DishStat> list = jdbcTemplate.query(sql, params, createDishRowMapper());
+
+        return list;
+    }
+
     private RowMapper<OrderStat> createRowMapper(){
         return ((rs, rowNum) -> new OrderStat(rs.getInt("order_price"),
                 rs.getInt("delivery_price"),
                 rs.getInt("total_price")));
+    }
+
+    private RowMapper<DishStat> createDishRowMapper(){
+        return ((rs, rowNum) -> new DishStat(rs.getString("dish_name"),
+                rs.getInt("count")));
     }
 }
 
