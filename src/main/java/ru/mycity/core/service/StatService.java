@@ -7,14 +7,22 @@ import ru.mycity.core.controller.dto.order.OrderList;
 import ru.mycity.core.controller.dto.order.OrderRequestDto;
 import ru.mycity.core.controller.dto.stat.DailyOrderStatDto;
 import ru.mycity.core.controller.dto.stat.DishStatDto;
+import ru.mycity.core.controller.dto.stat.GroupOrderStatDto;
 import ru.mycity.core.controller.dto.stat.OrderStatDto;
 import ru.mycity.core.service.dao.IStatDao;
 import ru.mycity.core.service.dao.model.*;
 import ru.mycity.core.utils.Utils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,14 +39,14 @@ public class StatService {
         return statDao.createOrder(toStatEntity(requestDto));
     }
 
-    public PageableDto<OrderStatDto> getListOrderStat(String startDate, String endDate, Integer size, Integer start) throws ParseException {
+    public PageableDto<OrderStatDto> getListOrderStat(String startDate, String endDate, Integer size, Integer start, String unit) throws ParseException {
 
         DateTimeModel dateTimeModel = null;
         dateTimeModel = Utils.getDateTime(startDate, endDate);
 
-        QuerryResult<List<OrderStat >> queryResult = statDao.getOrderStatList(dateTimeModel, size, start);
+        QuerryResult<List<OrderStat>> queryResult = statDao.getOrderStatList(dateTimeModel, size, start);
 
-        OrderStatDto orderStatDto = createOrderStatDto(queryResult.getT());
+        OrderStatDto orderStatDto = createOrderStatDto(queryResult.getT(), unit);
 
         return new PageableDto<>(orderStatDto, queryResult.getSize(),
                 queryResult.getStart(), queryResult.getTotal());
@@ -56,13 +64,13 @@ public class StatService {
 
     }
 
-    public OrderStatDto createOrderStatDto(List<OrderStat> list){
+    public OrderStatDto createOrderStatDto(List<OrderStat> list, String unit){
         return new OrderStatDto(
                 sumOrder(list),
                 sumDelivery(list),
                 sumTotal(list),
                 avgOrder(list),
-                toListDto(list));
+                toGroupDto(list, unit));
     }
 
     public List<DishStat> groupByDish(List<DishStat> list){
@@ -87,6 +95,51 @@ public class StatService {
                 .map(OrderStat::toDto)
                 .collect(Collectors.toList());
     }
+
+
+    private Map<LocalDateTime, List<DailyOrderStatDto>> toGroupDto(List<OrderStat> list, String unit){
+        return groupByUnit(list.stream()
+                .map(OrderStat::toDto)
+                .collect(Collectors.toList()), unit);
+    }
+
+    private Map<LocalDateTime, List<DailyOrderStatDto>> groupByUnit(List<DailyOrderStatDto> list, String unit){
+        if(unit==null){
+            return groupBy(list, ChronoUnit.DAYS);
+        }
+        switch (unit){
+            case "hour" :{
+                return groupBy(list, ChronoUnit.HOURS);
+            }
+            case "day" :{
+                return groupBy(list, ChronoUnit.DAYS);
+            }
+            case "week" :{
+                return groupBy(list, ChronoUnit.WEEKS);
+            }
+            case "month" :{
+                return groupBy(list, ChronoUnit.MONTHS);
+            }
+            default:{
+                return groupBy(list, ChronoUnit.DAYS);
+            }
+        }
+
+    }
+
+    public Map<LocalDateTime, List<DailyOrderStatDto>> groupBy(List<DailyOrderStatDto> list, ChronoUnit unit){
+
+        return list.stream()
+                .collect(Collectors.groupingBy(e-> e.getOrderDate().toLocalDateTime().truncatedTo(unit)));
+    }
+
+    public Map<Instant, List<DailyOrderStatDto>> groupByDays(List<DailyOrderStatDto> list, ChronoUnit unit){
+
+        return list.stream()
+                .collect(Collectors.groupingBy(e-> e.getOrderDate().toInstant().truncatedTo(unit)));
+    }
+
+
 
     private Order toStatEntity(OrderRequestDto requestDto){
         Order order = new Order();

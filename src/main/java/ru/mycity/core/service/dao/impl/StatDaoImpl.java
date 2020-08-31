@@ -126,7 +126,8 @@ public class StatDaoImpl implements IStatDao {
     private RowMapper<OrderStat> createRowMapper(){
         return ((rs, rowNum) -> new OrderStat(rs.getInt("order_price"),
                 rs.getInt("delivery_price"),
-                rs.getInt("total_price")));
+                rs.getInt("total_price"),
+                rs.getTimestamp("order_date")));
     }
 
     private RowMapper<DishStat> createDishRowMapper(){

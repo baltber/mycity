@@ -1,16 +1,18 @@
 package ru.mycity.core.controller.dto.stat;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class OrderStatDto {
     private int orderPrice;
     private int deliveryPrice;
     private int totalPrice;
     private Double avgOrderPrice;
-    private List<DailyOrderStatDto> dailyOrderList;
+    private Map<LocalDateTime, List<DailyOrderStatDto>> dailyOrderList;
 
-    public OrderStatDto(int orderPrice, int deliveryPrice, int totalPrice, Double avgOrderPrice, List<DailyOrderStatDto> dailyOrderList) {
+    public OrderStatDto(int orderPrice, int deliveryPrice, int totalPrice, Double avgOrderPrice, Map<LocalDateTime, List<DailyOrderStatDto>> dailyOrderList) {
         this.orderPrice = orderPrice;
         this.deliveryPrice = deliveryPrice;
         this.totalPrice = totalPrice;
@@ -53,11 +55,11 @@ public class OrderStatDto {
         this.avgOrderPrice = avgOrderPrice;
     }
 
-    public List<DailyOrderStatDto> getDailyOrderList() {
+    public Map<LocalDateTime, List<DailyOrderStatDto>> getDailyOrderList() {
         return dailyOrderList;
     }
 
-    public void setDailyOrderList(List<DailyOrderStatDto> dailyOrderList) {
+    public void setDailyOrderList(Map<LocalDateTime, List<DailyOrderStatDto>> dailyOrderList) {
         this.dailyOrderList = dailyOrderList;
     }
 }

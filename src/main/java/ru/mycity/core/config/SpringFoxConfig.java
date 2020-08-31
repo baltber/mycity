@@ -19,7 +19,7 @@ import javax.servlet.ServletContext;
 @Configuration
 @EnableSwagger2
 public class SpringFoxConfig{
-    private final String BASE_PATH = "/myapi";
+    private final static String BASE_PATH = "/myapi";
 
 //    @Bean
 //    @Primary
@@ -40,15 +40,15 @@ public class SpringFoxConfig{
 //            }
 //        };
 //    }
-
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
+@Bean
+public Docket api() {
+    return new Docket(DocumentationType.SWAGGER_2)
 //                .pathProvider(customPathProvider())
-                .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-                .paths(PathSelectors.any())
-                .build();
-    }
+            .select()
+            .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+            .paths(PathSelectors.any())
+            .build();
+}
+
 
 }

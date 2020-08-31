@@ -28,7 +28,8 @@ public class StatController {
     public PageableDto<OrderStatDto> getPriceStat(@RequestParam(value = "startDate", required = false) String startDate,
                                                   @RequestParam(value = "endDate", required = false) String endDate,
                                                   @RequestParam(value = "start", required = false) Integer start,
-                                                  @RequestParam(value = "size", required = false) Integer size
+                                                  @RequestParam(value = "size", required = false) Integer size,
+                                                  @RequestParam(value = "groupType", required = false) String groupType
                                      ) throws BadRequestException {
         try {
             int defaultSize=10;
@@ -39,7 +40,7 @@ public class StatController {
             if(start==null){
                 start=defaultStart;
             }
-            return statService.getListOrderStat(startDate, endDate, size, start);
+            return statService.getListOrderStat(startDate, endDate, size, start, groupType);
         } catch (ParseException e) {
             throw new BadRequestException("Неверный формат даты");
         }

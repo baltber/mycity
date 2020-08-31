@@ -1,28 +1,18 @@
 package ru.mycity.core.controller.dto.stat;
 
 
-import java.sql.Timestamp;
-
-public class DailyOrderStatDto {
+public class GroupOrderStatDto {
     private int orderPrice;
     private int deliveryPrice;
     private int totalPrice;
-    private Timestamp orderDate;
 
-    public DailyOrderStatDto() {
+    public GroupOrderStatDto() {
     }
 
-    public DailyOrderStatDto(int orderPrice, int deliveryPrice, int totalPrice) {
+    public GroupOrderStatDto(int orderPrice, int deliveryPrice, int totalPrice) {
         this.orderPrice = orderPrice;
         this.deliveryPrice = deliveryPrice;
         this.totalPrice = totalPrice;
-    }
-
-    public DailyOrderStatDto(int orderPrice, int deliveryPrice, int totalPrice, Timestamp orderDate) {
-        this.orderPrice = orderPrice;
-        this.deliveryPrice = deliveryPrice;
-        this.totalPrice = totalPrice;
-        this.orderDate = orderDate;
     }
 
     public int getOrderPrice() {
@@ -49,11 +39,4 @@ public class DailyOrderStatDto {
         this.totalPrice = totalPrice;
     }
 
-    public Timestamp getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Timestamp orderDate) {
-        this.orderDate = orderDate;
-    }
 }
